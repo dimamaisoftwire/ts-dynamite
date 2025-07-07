@@ -1,5 +1,5 @@
 # Build output
 dist
-
+/src/bots/nat*
 # Depedency directories
 node_modules
