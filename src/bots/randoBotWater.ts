@@ -14,15 +14,16 @@ class Bot {
         return false;
     }
     makeMove(gamestate: Gamestate): BotSelection {
+        if(gamestate.rounds.length == 0) return "W";
         // Keeping track of opponents dynamite
         if (gamestate.rounds.length > 0 && gamestate.rounds[gamestate.rounds.length - 1].p2 === 'D'){
             this.oppDynamiteCount ++;
         }
         // Check if opponent kept doing dynamite last N moves
-        function checkLastMoves(n:number, move:BotSelection){
+        function checkLastMoves(n:number){
             if(gamestate.rounds.length < n) return false;
             let last = gamestate.rounds[gamestate.rounds.length-1].p2;
-            for(let i = gamestate.rounds.length-1; i > gamestate.rounds.length-n; i--){
+            for(let i = gamestate.rounds.length-1; i > gamestate.rounds.length-n-1; i--){
                 if(gamestate.rounds[i].p2 !== last || last !== "D"){
                     return false;
                 }
@@ -44,15 +45,19 @@ class Bot {
         const baseMoves: BotSelection[] = ['R', 'P' ,'S'];
         let selection = baseMoves[Math.floor(Math.random() * baseMoves.length)];
 
-        if(checkLastDraw()&&this.dynamiteRemaining>0){
+        if(checkLastDraw()&&this.dynamiteRemaining>0 && gamestate.rounds[gamestate.rounds.length-1].p1 != "W"){
             selection = "D";
         }
-        if(checkLastMoves(3,"D") || this.checkDynamiteDrawResponse()){
+        if(checkLastMoves(Math.floor(Math.random() * 3)+1) || this.checkDynamiteDrawResponse()){
             selection = "W";
         }
         if(selection == "D"){
             this.dynamiteRemaining--;
         }
+        if(gamestate.rounds.length<200){
+            //console.log(gamestate.rounds[gamestate.rounds.length-1]);
+        }
+
         return selection;
     }
 }

@@ -6,7 +6,7 @@ class Bot {
         function checkLastMoves(n:number, move:BotSelection){
             if(gamestate.rounds.length < n) return false;
             let last = gamestate.rounds[gamestate.rounds.length-1].p2;
-            for(let i = gamestate.rounds.length-1; i > gamestate.rounds.length-n; i--){
+            for(let i = gamestate.rounds.length-1; i > gamestate.rounds.length-n-1; i--){
                 if(gamestate.rounds[i].p2 !== last || last !== "D"){
                     return false;
                 }
