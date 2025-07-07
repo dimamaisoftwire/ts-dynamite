@@ -13,6 +13,20 @@ class Bot {
             }
             return true;
         }
+        function checkOpponentDrawResponse(){
+            // Checks if opponent has same response to draws
+            if(gamestate.rounds.length<2) return false;
+            let responses: BotSelection[] = [];
+            for(let i = gamestate.rounds.length-2; i > 0; i--){
+                if(gamestate.rounds[i].p1 === gamestate.rounds[i].p2){ // Get all of oponents moves after draw
+                    responses.push(gamestate.rounds[i+1].p2);
+                }
+            }
+            let setofResponse = new Set(responses);
+            console.log(setofResponse)
+            return (setofResponse.size === 1);
+
+        }
         function checkLastDraw(){ // Check if last game was draw
             if(gamestate.rounds.length===0) return true;
             const lastMove = gamestate.rounds.length-1;
@@ -35,7 +49,7 @@ class Bot {
         if(checkLastDraw()&&this.dynamiteRemaining>0){
             selection = "D";
         }
-        if(checkLastMoves(3,"D") || checkDrawDynamiteOpponent()){
+        if(checkLastMoves(3,"D") || checkOpponentDrawResponse()){
             selection = "W";
         }
         if(selection == "D"){
